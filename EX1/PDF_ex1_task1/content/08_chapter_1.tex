@@ -1,0 +1,50 @@
+\section*{Theory Questions}
+
+\subsection*{Question 1}
+\textbf{Describe the advantages and disadvantages of a two-dimensional decomposition.} \\
+
+The main drawback of a two-dimensional decomposition is that the implementation is much more complex. 
+The complexity lies primarily on the number of MPI communications that have to be performed each iteration. 
+In a two-dimensional implementation, the number of communications is higher (4 communications in 2D vs. 
+2 communications in 1D) meaning that if the solver is not efficient, the speed-up will be hindered to the point where a two-dimensional 
+decomposition could in the worst-case scenario be equivalent to a one-dimensional implementation. \\
+
+The clear advantage of a two-dimensional decomposition is that if the program is implemented correctly, it is much more efficient 
+regarding computing power and large speed-up gains can be made when solving with a two-dimensional decomposition vs a one-dimensional decomposition.
+
+\subsection*{Question 2}
+\textbf{Discuss if the decomposition of the domain changes the order of computations performed during a single Jacobi iteration.} \\
+
+The result after each iteration should be completely independent of the domain. 
+The order of operations could be different depending on the decomposition of the domain, 
+but this should have no influence as calculations are performed independently for each point in the matrix.
+
+\subsection*{Question 3}
+\textbf{A generalization of the ghost layer approach would be to set the width of the ghost layer that is exchanged as a parameter \texttt{W} of 
+the decomposition. This allows to perform \texttt{W} independent iterations before a communication of the ghost layers has to happen.
+Comment in which situation multiple independent iterations are potentially advantageous.} \\
+
+If the width of the ghost layer were to be increased the amount of data stored must also increase proportionally. 
+This allows the program to run more independent iterations communicating less frequently. However, when the program indeed has to communicate, 
+larger amounts of data must be sent. This could be useful to reduce latency (fewer small messages would be sent) although the peak requirements of 
+bandwidth would be higher. Given the correct circumstances, increasing W could yield a speedup in communications and therefore in the program.
+
+\pagebreak
+
+
+\subsection*{Question 4}
+\textbf{Assume a ghost layer with width \texttt{W=1}  and discuss if a data exchange between parts of the domain which
+ are "diagonal neighbors" is required} \\
+
+ Only the top, bottom, left and right points would be used in a 5-point star-shaped stencil, therefore it does not matter what value is saved 
+ on the “diagonal neighbours”. This also means that no changes to these points must be communicated. 
+
+\subsection*{Question 5}
+\textbf{How big is the sum of all L2 caches for 2 nodes of the IUE-cluster?} \\
+
+The computing Infrastructure used consists of: \\
+ - Two nodes with two cores each:  \texttt{2x INTEL Xeon Gold 6248, 2.5GHz, 20C/40T} \\
+ - Twenty Core Processor: \href{https://www.dell.com/en-us/work/shop/intel-xeon-gold-6248-25ghz-twenty-core-processor-20c-40t-104gt-s-275m-cache-turbo-ht-150w-ddr4-2933/apd/338-brvk/processors}{Intel Xeon Gold 2.5GHz 20C}. \\
+ - Global L2 Cache: \href{https://www.server2u.com/shop/6248-intel-xeon-gold-6248-2-5ghz-3-9ghz-turbo-20c-40t-150-watt-12434?page=39&category=12#attr=42856,44542,46231,47917,49603,52132,55504,57190,58876,60462,62048,64190 }{20480KB} \\
+ - L2 Cache (single processor) = 1024KB \\
+ - Sum of all L2 Caches for 2 Nodes on IUE Cluster: $2 \cdot 2 \cdot 20 \cdot 1024 \text{kB} = 81920 \text{kB} =  81.92 \text{MB}$

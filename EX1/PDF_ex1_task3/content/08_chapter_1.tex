@@ -1,0 +1,9 @@
+\section*{Two Dimensional Decomposition of $\Omega$}
+
+As in Task 2, the existing Jacobi Stencil solver from NSSC1 was modified to use \texttt{MPI } for parallelization and the unmodified solver as standard for comparison of our output.
+For the 2D decomposition \texttt{MPI\_Dims\_create }, \texttt{MPI\_Car\_create } and accompaning functionalities was used. 
+The 1D decomposition was simply achieved with a restriction imposed on \texttt{MPI\_Dims\_create}.
+For the communication of the ghost layers nonblocking Sends with blocking Receives were used.
+In difference to the version of Task 2, the solutions from the single processes are not accumulated in the end and only the errors for the complete domain are computed.
+While the power of using \texttt{MPI} was observed it was also noticed in the end that for a more efficient program the parallelization with \texttt{MPI} would need to be planned from the start 
+as in difference to the \texttt{openMP} parallelization of NSSC1 the existing code needed a lot of adaption.
